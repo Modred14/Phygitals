@@ -1,0 +1,299 @@
+generator client {
+  provider = "prisma-client-js"
+}
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum PackStatus {
+  DRAFT
+  ACTIVE
+  PAUSED
+}
+enum ConfigStatus {
+  DRAFT
+  VALIDATED
+  PUBLISHED
+  RETIRED
+}
+enum LedgerAccountType {
+  USER_AVAILABLE
+  USER_PENDING
+  USER_REFERRAL_PENDING
+  USER_WITHDRAWAL_RESERVED
+  PLATFORM_TREASURY
+  PLATFORM_REWARD_POOL
+  PLATFORM_FEES
+  PLATFORM_MARKETING
+  EXTERNAL_CHAIN
+}
+enum DepositStatus {
+  AWAITING_PAYMENT
+  CONFIRMING
+  CREDITED
+  FAILED
+  EXPIRED
+}
+enum WithdrawalStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+enum ReferralStatus {
+  PENDING
+  ELIGIBLE
+  REJECTED
+}
+enum ReferralRewardStatus {
+  PENDING
+  CONFIRMED
+  REVOKED
+}
+enum AdminRole {
+  SUPPORT
+  FINANCE
+  SUPER_ADMIN
+}
+
+model User {
+  id           String   @id @default(cuid())
+  referralCode String   @unique
+  referredById String?
+  referredBy   User?    @relation("Referrals", fields: [referredById], references: [id])
+  referrals    User[]   @relation("Referrals")
+  isTestMode   Boolean  @default(false)
+  bannedAt     DateTime?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  telegram     TelegramAccount?
+  wallet       Wallet?
+  openings     PackOpening[]
+  deposits     Deposit[]
+  withdrawals  Withdrawal[]
+  referralAsReferrer Referral[] @relation("ReferrerSide")
+  referralAsReferred Referral?  @relation("ReferredSide")
+  @@index([referredById])
+}
+
+model TelegramAccount {
+  id         String   @id @default(cuid())
+  userId     String   @unique
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  telegramId BigInt   @unique
+  username   String?
+  firstName  String?
+  lastName   String?
+  photoUrl   String?
+  languageCode String?
+  lastAuthAt DateTime @default(now())
+  createdAt  DateTime @default(now())
+}
+
+model Wallet {
+  id            String   @id @default(cuid())
+  userId        String   @unique
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  depositAddress String? @unique // per-user Solana deposit address (public only)
+  availableAccountId String @unique
+  createdAt     DateTime @default(now())
+}
+
+model Pack {
+  id          String     @id @default(cuid())
+  slug        String     @unique
+  name        String
+  artworkUrl  String?
+  sortOrder   Int        @default(0)
+  status      PackStatus @default(DRAFT)
+  activeConfigId String? @unique
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  configs     RewardConfigurationVersion[] @relation("PackConfigs")
+  openings    PackOpening[]
+}
+
+model RewardConfigurationVersion {
+  id          String       @id @default(cuid())
+  packId      String
+  pack        Pack         @relation("PackConfigs", fields: [packId], references: [id])
+  version     Int
+  priceCents  BigInt
+  status      ConfigStatus @default(DRAFT)
+  evAcknowledgedBy String?
+  expectedValueCents Decimal @db.Decimal(20, 4) @default(0)
+  maxLiabilityCents  BigInt  @default(0)
+  publishedAt DateTime?
+  publishedBy String?
+  createdAt   DateTime     @default(now())
+  tiers       PackRewardTier[]
+  openings    PackOpening[]
+  @@unique([packId, version])
+}
+
+model PackRewardTier {
+  id            String @id @default(cuid())
+  configId      String
+  config        RewardConfigurationVersion @relation(fields: [configId], references: [id], onDelete: Cascade)
+  label         String
+  minCents      BigInt
+  maxCents      BigInt
+  probabilityPpm Int   // integer parts-per-million; configs must total 1,000,000
+  sortOrder     Int    @default(0)
+  openings      PackOpening[]
+  @@index([configId])
+}
+
+model PackOpening {
+  id             String   @id @default(cuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id])
+  packId         String
+  pack           Pack     @relation(fields: [packId], references: [id])
+  configId       String
+  config         RewardConfigurationVersion @relation(fields: [configId], references: [id])
+  tierId         String
+  tier           PackRewardTier @relation(fields: [tierId], references: [id])
+  idempotencyKey String
+  priceCents     BigInt
+  rewardCents    BigInt
+  roll           Int       // CSPRNG roll in [0, 1_000_000)
+  isTestMode     Boolean   @default(false)
+  createdAt      DateTime  @default(now())
+  @@unique([userId, idempotencyKey])
+  @@index([userId, createdAt])
+}
+
+model LedgerAccount {
+  id        String            @id @default(cuid())
+  type      LedgerAccountType
+  userId    String?
+  currency  String            @default("USD")
+  createdAt DateTime          @default(now())
+  entries   LedgerEntry[]
+  @@unique([type, userId, currency])
+}
+
+// Immutable, double-entry: every transaction has >=2 entries whose signed amounts sum to 0 (enforced in SQL migration trigger).
+model LedgerEntry {
+  id            String   @id @default(cuid())
+  transactionId String
+  accountId     String
+  account       LedgerAccount @relation(fields: [accountId], references: [id])
+  amountCents   BigInt   // signed; credit +, debit -
+  kind          String   // DEPOSIT, PACK_PURCHASE, PACK_REWARD, REFERRAL, WITHDRAWAL_RESERVE, WITHDRAWAL_RELEASE, WITHDRAWAL_FEE ...
+  refType       String?
+  refId         String?
+  idempotencyKey String? @unique
+  createdAt     DateTime @default(now())
+  @@index([accountId, createdAt])
+  @@index([transactionId])
+}
+
+model Deposit {
+  id          String        @id @default(cuid())
+  userId      String
+  user        User          @relation(fields: [userId], references: [id])
+  status      DepositStatus @default(AWAITING_PAYMENT)
+  asset       String        // e.g. USDC
+  network     String        @default("solana")
+  reference   String        @unique // memo/reference the payer must include; used for server-side matching
+  expectedAmountAtomic BigInt?
+  receivedAmountAtomic BigInt?
+  creditedCents BigInt?
+  address     String
+  chainTxId   String?       @unique
+  createdAt   DateTime      @default(now())
+  creditedAt  DateTime?
+  @@index([userId, createdAt])
+}
+
+model Withdrawal {
+  id           String           @id @default(cuid())
+  userId       String
+  user         User             @relation(fields: [userId], references: [id])
+  status       WithdrawalStatus @default(PENDING)
+  destination  String
+  amountCents  BigInt
+  platformFeeCents BigInt       @default(0) // disclosed separately from network fee
+  networkFeeLamports BigInt?
+  idempotencyKey String
+  signature    String?          @unique
+  failureReason String?
+  reviewedBy   String?
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+  @@unique([userId, idempotencyKey])
+  @@index([status, createdAt])
+}
+
+model Referral {
+  id          String         @id @default(cuid())
+  referrerId  String
+  referrer    User           @relation("ReferrerSide", fields: [referrerId], references: [id])
+  referredId  String         @unique // a user can be referred once
+  referred    User           @relation("ReferredSide", fields: [referredId], references: [id])
+  status      ReferralStatus @default(PENDING)
+  qualifyingEvent String?
+  createdAt   DateTime       @default(now())
+  reward      ReferralReward?
+  @@index([referrerId])
+}
+
+model ReferralReward {
+  id         String               @id @default(cuid())
+  referralId String               @unique
+  referral   Referral             @relation(fields: [referralId], references: [id])
+  amountCents BigInt
+  status     ReferralRewardStatus @default(PENDING)
+  reason     String?
+  confirmedAt DateTime?
+  createdAt  DateTime             @default(now())
+}
+
+model BlockchainTransaction {
+  id         String   @id @default(cuid())
+  network    String
+  signature  String   @unique
+  slot       BigInt?
+  status     String
+  direction  String   // IN | OUT
+  rawSummary Json?
+  createdAt  DateTime @default(now())
+}
+
+model Admin {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  passwordHash String
+  role         AdminRole @default(SUPPORT)
+  totpSecretEnc String?
+  lastTotpStep Int? // highest accepted 30s step; blocks code replay
+  disabledAt   DateTime?
+  createdAt    DateTime  @default(now())
+  logs         AuditLog[]
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  adminId   String?
+  admin     Admin?   @relation(fields: [adminId], references: [id])
+  action    String
+  entity    String
+  entityId  String?
+  before    Json?
+  after     Json?
+  ip        String?
+  createdAt DateTime @default(now())
+  @@index([entity, entityId])
+  @@index([createdAt])
+}
+
+model AppSettings {
+  key       String   @id
+  value     Json
+  updatedAt DateTime @updatedAt
+}
