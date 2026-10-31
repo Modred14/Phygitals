@@ -55,6 +55,7 @@ Pressing **Start** only works once the bot is connected to this app:
 1. Deploy to Vercel first (Telegram cannot reach `localhost`). Set `NEXT_PUBLIC_APP_URL` (your public `https://` URL, no trailing slash), `TELEGRAM_BOT_TOKEN` and `TELEGRAM_WEBHOOK_SECRET` (`openssl rand -hex 24`) in Vercel, then **redeploy** (NEXT_PUBLIC values are baked in at build time).
 2. Put the same three values in your local `.env`, then run `npm run set-webhook`. It registers `/api/telegram/webhook`, the `/start` command and the menu button.
 3. Open the bot and send `/start`: you should get the welcome message with an **Open App** button. If not, re-run the script and read its "last error", and check Vercel function logs.
+**Troubleshooting `/start` with no reply:** run `npm run check-bot`. It tests the bot token, the registered webhook (including Telegram's last delivery error) and the deployed site's settings, and prints the fix. Typical causes: `set-webhook` never succeeded; `NEXT_PUBLIC_APP_URL` is still the placeholder; Vercel is missing `TELEGRAM_BOT_TOKEN` / `TELEGRAM_WEBHOOK_SECRET`; env vars were added but not redeployed; the bot token was revoked and not updated on Vercel; or Vercel Deployment Protection blocks the URL.
 Referral links `https://t.me/BOT?start=CODE` also work: the code is passed to the app as `?ref=CODE`.
 
 ## 6. First admin

@@ -2,6 +2,12 @@ import { rateLimit } from "@/lib/rate-limit";
 import { appUrl, secretOk, startPayload, tgCall, welcomeMessage } from "@/lib/telegram-bot";
 export const dynamic = "force-dynamic";
 
+// Diagnostics for `npm run check-bot`: reports only whether settings exist, never their values.
+export async function GET() {
+  const url = appUrl();
+  return Response.json({ ok: true, configured: { token: Boolean(process.env.TELEGRAM_BOT_TOKEN), secret: /^[A-Za-z0-9_-]{16,}$/.test(process.env.TELEGRAM_WEBHOOK_SECRET ?? ""), appUrlHttps: /^https:\/\/[^/]+$/.test(url) && !url.includes("your-app.vercel.app") } });
+}
+
 // Telegram calls this for every message sent to the bot. Only requests carrying our secret token are accepted.
 export async function POST(req) {
   if (!secretOk(req.headers.get("x-telegram-bot-api-secret-token"), process.env.TELEGRAM_WEBHOOK_SECRET)) return Response.json({ error: "unauthorized" }, { status: 401 });

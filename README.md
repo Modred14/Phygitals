@@ -42,4 +42,3 @@ Set `NEXT_PUBLIC_APP_NAME`. The screenshots in `design-reference/` belong to a t
 
 ## Prisma version (important)
 This project is pinned to **Prisma 5.22.0**. Always run `npm install` first and use the local binary (`npx prisma -v` must print 5.22.x). If `npx` prints Prisma 6/7 it is downloading a newer CLI because `node_modules` is missing; Prisma 7 rejects this schema's `url = env(...)` datasource format. `npm test` validates the schema with Prisma's own validator.
-# Phygitals
