@@ -156,3 +156,14 @@ test("bot: /start parsing, welcome message with web_app button, webhook secret c
   assert.equal(welcomeMessage(5, { payload: "bad code!", appName: "B", url: "https://x.app" }).reply_markup.inline_keyboard[0][0].web_app.url, "https://x.app");
   assert.equal(secretOk("a".repeat(20), "a".repeat(20)), true); assert.equal(secretOk("a".repeat(20), "b".repeat(20)), false); assert.equal(secretOk("", ""), false); assert.equal(secretOk("short", "short"), false);
 });
+
+import { resolveAppUrl } from "../lib/telegram-bot.js";
+test("app URL resolves from env, falls back to request host, rejects placeholders", () => {
+  const h = (host) => new Headers({ host });
+  assert.equal(resolveAppUrl({ NEXT_PUBLIC_APP_URL: "https://a.app/" }, h("b.app")), "https://a.app");
+  assert.equal(resolveAppUrl({}, h("phygitals.vercel.app")), "https://phygitals.vercel.app");
+  assert.equal(resolveAppUrl({ NEXT_PUBLIC_APP_URL: "https://your-app.vercel.app" }, h("real.app")), "https://real.app");
+  assert.equal(resolveAppUrl({ APP_URL: "https://c.app" }, null), "https://c.app");
+  assert.equal(resolveAppUrl({}, null), ""); assert.equal(resolveAppUrl({}, h("evil host/x")), "");
+  assert.equal(resolveAppUrl({}, new Headers({ "x-forwarded-host": "fwd.app", host: "internal" })), "https://fwd.app");
+});

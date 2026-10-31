@@ -42,8 +42,9 @@ const ok = (m) => console.log("  OK   " + m), bad = (m) => console.log("  FAIL "
       ok("Deployed app reachable");
       c.token ? ok("Vercel has TELEGRAM_BOT_TOKEN") : bad("Vercel is MISSING TELEGRAM_BOT_TOKEN");
       c.secret ? ok("Vercel has a valid TELEGRAM_WEBHOOK_SECRET") : bad("Vercel is MISSING/INVALID TELEGRAM_WEBHOOK_SECRET");
-      c.appUrlHttps ? ok("Vercel NEXT_PUBLIC_APP_URL is a valid https URL") : bad("Vercel NEXT_PUBLIC_APP_URL is missing/placeholder/not https (the welcome button needs it)");
-      if (!c.token || !c.secret || !c.appUrlHttps) hint("Add the missing variables in Vercel > Settings > Environment Variables (Production), then REDEPLOY.");
+      c.appUrlHttps ? ok("Vercel NEXT_PUBLIC_APP_URL is a valid https URL") : (c.effectiveUrlOk ? console.log("  WARN Vercel NEXT_PUBLIC_APP_URL is missing; the bot is using this site's own address instead (works, but add the variable too)") : bad("Vercel has no usable app URL: the welcome button cannot be built"));
+      if (!c.token || !c.secret || !c.effectiveUrlOk) hint("Add the missing variables in Vercel > Settings > Environment Variables (Production), then REDEPLOY.");
+      if (c.effectiveUrlOk === undefined) hint("The deployed code is older than this check. Push the latest code so the fix is live.");
     } else { bad(`Deployed site answered HTTP ${r.status} without the diagnostics response`); hint(r.status === 401 || /vercel/i.test(t) && /authenticat/i.test(t) ? "Vercel Deployment Protection is on for this URL. Use the production domain or disable protection." : "The latest code may not be deployed to this URL."); }
   } catch (e) { bad("Could not reach " + base + " (" + e.message + ")"); hint("Is the site deployed and is the URL spelled correctly?"); }
 })().catch((e) => { console.error("check failed:", e.message); process.exit(1); });
