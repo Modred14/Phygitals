@@ -1,3 +1,4 @@
+// FILE: components/Landing.js
 "use client";
 import { useEffect, useState } from "react";
 import PackArt from "./PackArt";
@@ -14,17 +15,17 @@ export default function Landing({ error }) {
   const list = packs?.length ? packs : FALLBACK;
   return (
     <div className="page" style={{ display: "flex", flexDirection: "column" }}>
-      <div className="brand" style={{ textAlign: "center" }}>{name}</div>
-      <div className="hero"><HeroCard /></div>
-      <h2 style={{ textAlign: "center", fontSize: 30 }}>Collect football stars.</h2>
-      <p className="mut" style={{ textAlign: "center", margin: "8px 0 16px" }}>{error ? "We couldn't verify your Telegram session. Reopen the app from the bot." : "Open this app from Telegram to sign in securely."}</p>
+      <div className="brand rise" style={{ textAlign: "center", fontSize: 28, "--i": 0 }}>{name}</div>
+      <div className="hero rise" style={{ "--i": 1 }}><HeroCard /></div>
+      <h2 className="rise" style={{ textAlign: "center", fontSize: 32, letterSpacing: "-.04em", "--i": 2 }}>Collect football stars.</h2>
+      <p className="mut rise" style={{ textAlign: "center", margin: "8px 0 16px", "--i": 3 }}>{error ? "We couldn't verify your Telegram session. Reopen the app from the bot." : "Open this app from Telegram to sign in securely."}</p>
       <div className="label" style={{ margin: "6px 0 8px" }}>Packs</div>
-      <div className="strip" aria-label="Available packs">
+      <div className="strip rise" style={{ "--i": 4 }} aria-label="Available packs">
         {list.map((p) => (
           <div key={p.slug} className="strip-item"><PackArt slug={p.slug} name={p.name} width={118} /><b>{p.name}</b>{p.priceCents != null && <span className="mut">{fmtWhole(p.priceCents)}</span>}</div>
         ))}
       </div>
-      <a className="btn" style={{ textDecoration: "none", marginTop: 18 }} href={`https://t.me/${bot}`}>Open in Telegram</a>
+      <a className="btn rise" style={{ marginTop: 18, "--i": 5 }} href={`https://t.me/${bot}`}>Open in Telegram</a>
       <p className="mut" style={{ textAlign: "center", fontSize: 12, marginTop: 16 }}>Must be 18+ to continue. Odds are shown before every purchase.</p>
     </div>
   );

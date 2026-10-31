@@ -1,3 +1,4 @@
+// FILE: app/(tg)/deposit/page.js
 "use client";
 import { useState } from "react";
 import BackBar from "@/components/BackBar";
@@ -44,10 +45,10 @@ export default function DepositPage() {
         <div style={{ marginTop: 20 }}>
           <div className="label">Send USDC on Solana to</div>
           <div className="field">{dep.address}</div>
-          <button className="btn dark" style={{ marginTop: 10, height: 48 }} onClick={() => copy("a", dep.address)}>{I.copy} {copied === "a" ? "Copied" : "Copy address"}</button>
+          <button className="btn dark sm" style={{ marginTop: 10, width: "100%" }} onClick={() => copy("a", dep.address)}>{I.copy} {copied === "a" ? "Copied" : "Copy address"}</button>
           <div className="label">Reference (include as memo)</div>
           <div className="field">{dep.reference}</div>
-          <button className="btn dark" style={{ marginTop: 10, height: 48 }} onClick={() => copy("r", dep.reference)}>{I.copy} {copied === "r" ? "Copied" : "Copy reference"}</button>
+          <button className="btn dark sm" style={{ marginTop: 10, width: "100%" }} onClick={() => copy("r", dep.reference)}>{I.copy} {copied === "r" ? "Copied" : "Copy reference"}</button>
           <div className="label">After sending, paste the transaction signature</div>
           <input className="field" style={{ width: "100%", color: "#fff" }} value={sig} onChange={(e) => setSig(e.target.value)} placeholder="Transaction signature" aria-label="Transaction signature" autoCapitalize="off" autoCorrect="off" />
           <button className="btn" style={{ marginTop: 10, height: 48 }} onClick={verify} disabled={vbusy || !sig.trim()}>{vbusy ? "Verifying…" : "Verify deposit"}</button>

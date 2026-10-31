@@ -1,7 +1,8 @@
+// FILE: components/TopBar.js
 "use client";
 import Link from "next/link";
 import { useMe } from "./AuthProvider";
-import { fmt } from "@/lib/format";
+import Money from "./Money";
 import { I } from "./Icons";
 export default function TopBar() {
   const { me } = useMe();
@@ -9,7 +10,7 @@ export default function TopBar() {
     <div className="top">
       <div className="brand">{process.env.NEXT_PUBLIC_APP_NAME ?? "Football Packs"}</div>
       <Link href="/wallet" className="pill" aria-label="Open wallet" style={{ textDecoration: "none", color: "inherit" }}>
-        <span>{fmt(me.balanceCents)}</span><span className="plus">{I.plus}</span>
+        <Money cents={me.balanceCents} /><span className="plus">{I.plus}</span>
       </Link>
     </div>
   );
