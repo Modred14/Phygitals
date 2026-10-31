@@ -1,7 +1,9 @@
 Landing-page hero image
 =======================
-Drop a file named  hero.jpg  (portrait, about 600x800) in this folder and it replaces the built-in illustration
-on the sign-in screen. Only use an image you have the rights to use commercially. A photo of a real player
-(for example a famous footballer) needs a licence or written permission from the player/rights holder;
-using one without permission in a paid product can lead to legal claims and takedowns.
-Delete hero.jpg to go back to the illustration.
+hero.jpg is an ORIGINAL illustrated, fictional footballer made for this project. It is not based on any real
+person, and its shirt colours/number are generic, so you can use it freely in your app.
+
+To use your own image instead: replace hero.jpg (portrait, about 600x800). Only use an image you have the rights
+to use commercially. A photo or lookalike of a real player needs a licence or written permission from the
+player/rights holder; using one without permission in a paid product can lead to legal claims and takedowns.
+Delete hero.jpg to fall back to the built-in vector illustration.
