@@ -1,3 +1,4 @@
+// FILE: app/(tg)/withdraw/page.js
 "use client";
 import { useEffect, useRef, useState } from "react";
 import BackBar from "@/components/BackBar";
@@ -27,9 +28,9 @@ export default function WithdrawPage() {
     } catch (e) { setMsg({ ok: false, text: ERR[e.message] ?? "Couldn't submit. Your balance wasn't changed unless it appears below." }); }
     finally { setBusy(false); }
   }
-  if (!me.flags.withdrawals) return <div className="page"><BackBar title="Withdraw" /><div className="empty">Withdrawals aren&apos;t enabled yet.</div></div>;
+  if (!me.flags.withdrawals) return <div className="page enter"><BackBar title="Withdraw" /><div className="empty">Withdrawals aren&apos;t enabled yet.</div></div>;
   return (
-    <div className="page">
+    <div className="page enter">
       <BackBar title="Withdraw" />
       <p className="mut">Available: <b style={{ color: "#fff" }}>{fmt(me.balanceCents)}</b></p>
       <div className="label">Solana wallet address</div>

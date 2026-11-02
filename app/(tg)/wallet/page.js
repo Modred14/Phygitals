@@ -16,7 +16,7 @@ export default function WalletPage() {
   const [tx, setTx] = useState(null);
   useEffect(() => { api("/api/transactions").then((d) => setTx(d.entries)).catch(() => setTx([])); }, [me.balanceCents]);
   return (
-    <div className="page">
+    <div className="page enter">
       <BackBar title="Wallet" right={<button className="icon-btn" aria-label="Refresh" onClick={async () => { setSpin(true); await refresh().catch(() => {}); setSpin(false); haptic(); }}><span style={{ display: "grid", animation: spin ? "spin .8s linear infinite" : "none" }}>{I.refresh}</span></button>} />
       <div className="hero-balance rise" style={{ "--i": 0 }}>
         <div className="row gap"><span className="avatar" style={{ width: 34, height: 34 }}>$</span><span className="acc" style={{ letterSpacing: ".2em", fontWeight: 750, fontSize: 12 }}>AVAILABLE</span></div>

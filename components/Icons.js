@@ -1,3 +1,4 @@
+// FILE: components/Icons.js
 const P = { width: 24, height: 24, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 1.8, strokeLinecap: "round", strokeLinejoin: "round" };
 export const I = {
   packs: <svg {...P}><path d="M12 3 4 7v10l8 4 8-4V7z"/><path d="M4 7l8 4 8-4M12 11v10"/></svg>,
@@ -13,5 +14,8 @@ export const I = {
   refresh: <svg {...P}><path d="M20 11a8 8 0 0 0-14-4M4 4v4h4M4 13a8 8 0 0 0 14 4M20 20v-4h-4"/></svg>,
   users: <svg {...P}><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.5-3.5 3-5 6.5-5s6 1.5 6.5 5M16 5a3.5 3.5 0 0 1 0 6.5M18 15c2 .5 3.3 2 3.5 5"/></svg>,
   chev: <svg {...P}><path d="m6 9 6 6 6-6"/></svg>,
+  right: <svg {...P}><path d="m9 6 6 6-6 6"/></svg>,
+  wallet: <svg {...P}><path d="M4 7a2 2 0 0 1 2-2h12v4M4 7v10a2 2 0 0 0 2 2h14V9H6a2 2 0 0 1-2-2z"/><circle cx="16.5" cy="14" r="1"/></svg>,
+  shield: <svg {...P}><path d="M12 3 5 6v6c0 4.5 3 7.5 7 9 4-1.5 7-4.5 7-9V6z"/><path d="m9 12 2 2 4-4"/></svg>,
   plus: <svg {...P}><path d="M12 5v14M5 12h14"/></svg>,
 };

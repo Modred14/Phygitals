@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import PackArt from "./PackArt";
 import Money from "./Money";
-import { api, haptic, tg } from "@/lib/client";
+import { api, haptic, hapticsOn, tg } from "@/lib/client";
 import { fmt } from "@/lib/format";
 
 const MESSAGES = { insufficient_balance: "Not enough balance.", rate_limited: "Too many attempts. Wait a moment.", pack_unavailable: "This pack isn't available right now.", duplicate_request: "That request is already being processed." };
@@ -28,7 +28,7 @@ export default function OpenPackModal({ pack, onClose, onDone }) {
       ]);
       setRes(data); setStage("reveal"); onDone?.();
       const r = rarityOf(data.opening.rewardCents, data.opening.priceCents);
-      try { r === "common" ? tg()?.HapticFeedback?.impactOccurred("medium") : tg()?.HapticFeedback?.notificationOccurred("success"); } catch {}
+      try { if (hapticsOn()) r === "common" ? tg()?.HapticFeedback?.impactOccurred("medium") : tg()?.HapticFeedback?.notificationOccurred("success"); } catch {}
     } catch (e) {
       setError({ code: e.message }); setStage("error");
       if (e.message === "insufficient_balance") key.current = crypto.randomUUID();

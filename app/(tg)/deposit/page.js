@@ -32,7 +32,7 @@ export default function DepositPage() {
   const copy = async (k, v) => { try { await navigator.clipboard.writeText(v); setCopied(k); setTimeout(() => setCopied(""), 1500); haptic(); } catch {} };
 
   return (
-    <div className="page" style={{ display: "flex", flexDirection: "column" }}>
+    <div className="page enter" style={{ display: "flex", flexDirection: "column" }}>
       <BackBar title="Deposit" />
       <h1 style={{ marginTop: 18 }}>Add funds</h1>
       <p className="mut">Pick a network and token, then generate a deposit address.</p>
