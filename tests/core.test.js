@@ -1,3 +1,4 @@
+// FILE: tests/core.test.js
 import test from "node:test";
 import assert from "node:assert/strict";
 import { createHmac } from "node:crypto";
@@ -166,4 +167,19 @@ test("app URL resolves from env, falls back to request host, rejects placeholder
   assert.equal(resolveAppUrl({ APP_URL: "https://c.app" }, null), "https://c.app");
   assert.equal(resolveAppUrl({}, null), ""); assert.equal(resolveAppUrl({}, h("evil host/x")), "");
   assert.equal(resolveAppUrl({}, new Headers({ "x-forwarded-host": "fwd.app", host: "internal" })), "https://fwd.app");
+});
+
+import { cardIdentity, rarityOf as cardRarity } from "../lib/cards.js";
+test("card identities are deterministic, valid and never undefined/negative", () => {
+  const seen = new Set();
+  for (const slug of ["legend", "ballon-dor", "prime", "superstar"]) for (const label of ["$1–$5", "$10–$50", "$600–$700", "$701–$1,000", "x", "y z"]) for (const r of ["epic", "rare", "common"]) {
+    const a = cardIdentity(slug, label, r), b = cardIdentity(slug, label, r);
+    assert.deepEqual(a, b);
+    assert.ok(a.number >= 1 && a.number <= 98 && Number.isInteger(a.number));
+    assert.ok(!/undefined|NaN/.test(a.name) && a.pos);
+    seen.add(a.name);
+  }
+  assert.ok(seen.size > 10);
+  assert.equal(cardRarity(30000, 10000), "epic"); assert.equal(cardRarity(10000, 10000), "rare"); assert.equal(cardRarity(9999, 10000), "common");
+  assert.doesNotThrow(() => cardIdentity("a", "b", "unknown"));
 });

@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import PackArt from "./PackArt";
 import Money from "./Money";
+import PlayerCard, { cardIdentity } from "./PlayerCard";
 import { api, haptic, hapticsOn, tg } from "@/lib/client";
 import { fmt } from "@/lib/format";
 
@@ -50,9 +51,10 @@ export default function OpenPackModal({ pack, onClose, onDone }) {
           {rarity !== "common" && <div className="burst" aria-hidden="true">{PARTS.map((p, i) => <i key={i} style={{ "--x": `${p.x}px`, "--y": `${p.y}px`, "--d": `${p.d}ms`, "--c": colors[i % 3] }} />)}</div>}
           <div className="reveal" data-rarity={rarity}>
             {res.opening.testMode && <span className="tag" style={{ marginLeft: 0 }}>TEST RESULT · NO REAL MONEY</span>}
-            <div className="mut" style={{ marginTop: 14, letterSpacing: ".18em", fontSize: 11.5, fontWeight: 700 }}>{pack.name.toUpperCase()}</div>
+            <div className="reveal-card"><PlayerCard rarity={rarity} {...cardIdentity(pack.slug, res.opening.tierLabel, rarity)} /></div>
+            <div className="mut" style={{ marginTop: 6, letterSpacing: ".18em", fontSize: 11.5, fontWeight: 700 }}>{pack.name.toUpperCase()}</div>
             <h2 style={{ fontSize: 21, margin: "10px 0 0" }}>{res.opening.tierLabel}</h2>
-            <div className="reveal-amt acc"><Money cents={res.opening.rewardCents} initial={0} duration={1100} /></div>
+            <div className="reveal-amt acc" style={{ fontSize: 44 }}><Money cents={res.opening.rewardCents} initial={0} duration={1100} /></div>
             <p className="mut" style={{ fontSize: 13, margin: 0 }}>{res.opening.testMode ? "Test openings don't change your balance." : `Paid ${fmt(res.opening.priceCents)} · New balance ${fmt(res.balanceCents)}`}</p>
           </div>
           <button className="btn" style={{ marginTop: 18 }} onClick={onClose}>Done</button>

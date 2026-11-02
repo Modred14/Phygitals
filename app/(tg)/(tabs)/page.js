@@ -3,9 +3,10 @@
 import { useEffect, useRef, useState } from "react";
 import PackArt, { packGlow } from "@/components/PackArt";
 import OpenPackModal from "@/components/OpenPackModal";
+import PackContents from "@/components/PackContents";
 import { useMe } from "@/components/AuthProvider";
 import { api, haptic } from "@/lib/client";
-import { fmt, fmtWhole, fmtCompact, pct } from "@/lib/format";
+import { fmt, fmtWhole, fmtCompact } from "@/lib/format";
 import { I } from "@/components/Icons";
 
 export default function PacksPage() {
@@ -60,20 +61,7 @@ export default function PacksPage() {
       {short && <p className="mut" style={{ textAlign: "center", fontSize: 13, margin: "12px 0 0" }}>You need {fmt(p.priceCents - me.balanceCents)} more to open this pack.</p>}
       {opening && <OpenPackModal pack={p} onClose={() => setOpening(false)} onDone={() => refresh().catch(() => {})} />}
 
-      {odds && (
-        <div className="sheet-bg" onClick={() => setOdds(false)}>
-          <div className="sheet" onClick={(e) => e.stopPropagation()} role="dialog" aria-label={`${p.name} odds`}>
-            <h2>{p.name} odds</h2>
-            <p className="mut" style={{ fontSize: 13, lineHeight: 1.5 }}>Config v{p.configVersion} · price {fmt(p.priceCents)}. Outcomes are drawn on our servers with a cryptographic random generator.</p>
-            <div className="list card" style={{ marginTop: 12 }}>
-              {p.tiers.map((t) => (
-                <div key={t.id}><div><b>{t.label}</b><div className="mut" style={{ fontSize: 13 }}>{fmt(t.minCents)}{t.maxCents !== t.minCents ? ` – ${fmt(t.maxCents)}` : ""}</div></div><b className="num">{pct(t.probabilityPpm)}</b></div>
-              ))}
-            </div>
-            <button className="btn dark" style={{ marginTop: 16 }} onClick={() => setOdds(false)}>Close</button>
-          </div>
-        </div>
-      )}
+      {odds && <PackContents pack={p} onClose={() => setOdds(false)} />}
     </>
   );
 }
