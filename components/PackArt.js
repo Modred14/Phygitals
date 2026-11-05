@@ -1,39 +1,48 @@
 // FILE: components/PackArt.js
-// Original foil-pack artwork (no third-party IP). Colours per pack slug.
-const THEMES = {
-  legend: ["#f7e7a1", "#c9a227", "#1a1a1a", "LEGEND", "rgba(242,193,78,.45)"],
-  "ballon-dor": ["#f4efe6", "#b88a2e", "#2a1d05", "BALLON D'OR", "rgba(226,190,120,.42)"],
-  prime: ["#ff9a90", "#b71c1c", "#ffffff", "PRIME", "rgba(255,90,80,.42)"],
-  superstar: ["#8ec5ff", "#1565c0", "#ffffff", "SUPERSTAR", "rgba(80,160,255,.45)"],
+// Flat foil-pack artwork: solid colour blocks, crimped ends, pitch markings. No gradients. Original design (no third-party IP).
+const PACKS = {
+  legend: { face: "#ffd23f", dark: "#d9a900", ink: "#1a1400", lines: ["LEGEND"] },
+  "ballon-dor": { face: "#f3f1e8", dark: "#c9c5b2", ink: "#0b3d2e", lines: ["BALLON", "D'OR"] },
+  prime: { face: "#e5484d", dark: "#b53539", ink: "#fff4ef", lines: ["PRIME"] },
+  superstar: { face: "#2f6fed", dark: "#2456bd", ink: "#f3f6ff", lines: ["SUPER", "STAR"] },
 };
-export const packGlow = (slug) => (THEMES[slug] ?? THEMES.superstar)[4];
+const DISPLAY = "'Barlow Condensed','Arial Narrow',sans-serif";
 
-export default function PackArt({ slug, name, width = 260 }) {
-  const [a, b, ink, title] = THEMES[slug] ?? THEMES.superstar;
-  const id = `g-${slug}`;
+// zig-zag edge points from x=260 to x=0 (shared by both halves of a torn pack)
+const TEAR = Array.from({ length: 22 }, (_, i) => [260 - i * 12, i % 2 ? 86 : 76]).concat([[0, 76]]);
+const pts = TEAR.map(([x, y]) => `L${x} ${y}`).join(" ");
+const crimp = (y0, y1, up) => { let d = `M14 ${up ? y1 : y0}`; d += ` V${up ? y0 + 8 : y1 - 8}`; for (let x = 14; x < 246; x += 10) d += ` L${x + 5} ${up ? y0 : y1} L${x + 10} ${up ? y0 + 8 : y1 - 8}`; return `${d} V${up ? y1 : y0} Z`; };
+
+export default function PackArt({ slug, name, width = 260, torn = false }) {
+  const c = PACKS[slug] ?? PACKS.superstar, n = c.lines.length, last = 100 + (n - 1) * 58;
+  const art = (
+    <g>
+      <path d={crimp(10, 40, true)} fill={c.dark}/>
+      <path d={crimp(380, 410, false)} fill={c.dark}/>
+      <rect x="14" y="40" width="232" height="340" fill={c.face}/>
+      <circle cx="130" cy="236" r="66" fill="none" stroke={c.ink} strokeOpacity=".16" strokeWidth="2"/>
+      <rect x="14" y="235" width="232" height="2" fill={c.ink} opacity=".16"/>
+      <polygon points="14,318 246,262 246,380 14,380" fill={c.dark}/>
+      {c.lines.map((t, i) => <text key={t} x="26" y={100 + i * 58} fontSize="64" fontWeight="800" fontStyle="italic" fill={c.ink} fontFamily={DISPLAY}>{t}</text>)}
+      <text x="28" y={last + 24} fontSize="12" fill={c.ink} opacity=".75" fontFamily="'Hanken Grotesk Variable',sans-serif">Football player cards</text>
+      <text x="28" y="362" fontSize="19" fontWeight="700" fill={c.ink} fontFamily={DISPLAY}>Series 2026</text>
+      <circle cx="204" cy="330" r="26" fill="#f3f1e8"/>
+      <path d="M204 316l12 9-4.5 14h-15L192 325z" fill="#1a1400"/>
+      <path d="M204 316v-6M216 325l7-3M211.5 339l5 7M196.5 339l-5 7M192 325l-7-3" stroke="#1a1400" strokeWidth="2.5" strokeLinecap="round"/>
+    </g>
+  );
   return (
-    <svg width={width} viewBox="0 0 260 420" role="img" aria-label={`${name} artwork`}>
-      <defs>
-        <linearGradient id={id} x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor={a}/><stop offset=".55" stopColor="#fff" stopOpacity=".88"/><stop offset="1" stopColor={b}/></linearGradient>
-        <linearGradient id={`${id}-f`} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor={b}/><stop offset=".5" stopColor={a}/><stop offset="1" stopColor={b}/></linearGradient>
-        <clipPath id={`cp-${slug}`}><rect x="14" y="52" width="232" height="316"/></clipPath>
-        <pattern id={`ln-${slug}`} width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(35)"><rect width="6" height="6" fill="none"/><rect width="1.2" height="6" fill="#fff" opacity=".13"/></pattern>
-      </defs>
-      <path d="M14 10h232l-6 8 6 8-6 8 6 8-6 8H14l6-8-6-8 6-8-6-8z" fill={`url(#${id}-f)`}/>
-      <rect x="14" y="52" width="232" height="316" fill={`url(#${id})`}/>
-      <rect x="14" y="52" width="232" height="316" fill={`url(#ln-${slug})`}/>
-      <path d="M14 394h232l-6-8 6-8-6-8 6-8-6-8H14l6 8-6 8 6 8-6 8z" fill={`url(#${id}-f)`}/>
-      <rect x="14" y="52" width="232" height="316" fill="none" stroke="#fff" strokeOpacity=".5"/>
-      <text x="130" y="92" textAnchor="middle" fontSize="10.5" letterSpacing="3.2" fill={ink} opacity=".75" fontFamily="sans-serif">FOOTBALL PLAYER CARDS</text>
-      <text x="130" y="142" textAnchor="middle" fontSize={title.length > 8 ? 29 : 40} fontWeight="900" fill={ink} fontStyle="italic" fontFamily="sans-serif">{title}</text>
-      <g transform="translate(130 246)">
-        <circle r="82" fill={ink} opacity=".08"/>
-        <circle r="76" fill="#fff" stroke={ink} strokeWidth="5"/>
-        <path d="M0-30 28-9 17 24h-34L-28-9z" fill={ink}/>
-        <path d="M0-30v-44M28-9l42-14M17 24l26 36M-17 24l-26 36M-28-9l-42-14" stroke={ink} strokeWidth="5"/>
-      </g>
-      <text x="26" y="352" fontSize="19" fill={ink} fontFamily="sans-serif" opacity=".9">{name.replace(" Pack", "")}</text>
-      <g clipPath={`url(#cp-${slug})`}><g transform="skewX(-18)"><rect className="pack-shine" x="-60" y="40" width="64" height="340" fill="#fff" opacity=".42"/></g></g>
+    <svg width={width} viewBox="0 0 260 420" role="img" aria-label={`${name} artwork`} style={{ display: "block", overflow: "visible" }}>
+      {torn ? (
+        <>
+          <defs>
+            <clipPath id={`top-${slug}`}><path d={`M-40 -60 H300 V76 ${pts} H-40 Z`}/></clipPath>
+            <clipPath id={`bot-${slug}`}><path d={`M-40 480 H300 V76 ${pts} H-40 Z`}/></clipPath>
+          </defs>
+          <g clipPath={`url(#bot-${slug})`} className="pk-body">{art}</g>
+          <g clipPath={`url(#top-${slug})`} className="pk-top">{art}</g>
+        </>
+      ) : art}
     </svg>
   );
 }

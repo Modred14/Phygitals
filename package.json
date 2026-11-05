@@ -16,6 +16,8 @@
     "check-bot": "node scripts/check-bot.js"
   },
   "dependencies": {
+    "@fontsource-variable/hanken-grotesk": "^5.3.0",
+    "@fontsource/barlow-condensed": "^5.3.0",
     "@prisma/client": "5.22.0",
     "@solana/web3.js": "^1.95.3",
     "next": "^14.2.15",
@@ -25,10 +27,10 @@
   },
   "devDependencies": {
     "@electric-sql/pglite": "^0.5.13",
+    "@prisma/prisma-schema-wasm": "5.22.0-44.605197351a3c8bdd595af2d2a9bc3025bca48ea2",
     "eslint": "^8.57.0",
     "eslint-config-next": "^14.2.15",
-    "prisma": "5.22.0",
-    "@prisma/prisma-schema-wasm": "5.22.0-44.605197351a3c8bdd595af2d2a9bc3025bca48ea2"
+    "prisma": "5.22.0"
   },
   "engines": {
     "node": ">=22"

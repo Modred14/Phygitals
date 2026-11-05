@@ -1,7 +1,7 @@
 // FILE: app/(tg)/(tabs)/page.js
 "use client";
 import { useEffect, useRef, useState } from "react";
-import PackArt, { packGlow } from "@/components/PackArt";
+import PackArt from "@/components/PackArt";
 import OpenPackModal from "@/components/OpenPackModal";
 import PackContents from "@/components/PackContents";
 import { useMe } from "@/components/AuthProvider";
@@ -37,7 +37,7 @@ export default function PacksPage() {
   return (
     <>
       {data.testMode && <div className="banner test">Test mode · no real money is used and no payouts are made.</div>}
-      <div className="stage" style={{ "--pack-glow": packGlow(p.slug) }}>
+      <div className="stage">
         <div className="carousel" ref={ref} onScroll={onScroll}>
           {data.packs.map((k, i) => (
             <div key={k.id} className={`slide ${i === idx ? "on" : ""}`} onClick={() => goTo(i)}><PackArt slug={k.slug} name={k.name} width={226} /></div>
