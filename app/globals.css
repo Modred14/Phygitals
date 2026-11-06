@@ -296,3 +296,12 @@ a.menu-row:active{background:var(--s2)}
   .nav,.sheet{background:rgba(8,44,33,.97)}
   .sheet-bg,.sheet-bg.open-bg{background:rgba(2,18,13,.92);-webkit-backdrop-filter:none;backdrop-filter:none}
 }
+
+/* ===== 3D pack tilt ===== */
+@property --nx{syntax:"<number>";inherits:true;initial-value:0}
+@property --ny{syntax:"<number>";inherits:true;initial-value:0}
+.pk3d{perspective:620px;display:block}
+.pk3d-in{transform-style:preserve-3d;transform:rotateX(calc(var(--ny)*-11deg)) rotateY(calc(var(--nx)*15deg));animation:pkSway 7s ease-in-out infinite}
+.pk3d.live .pk3d-in{animation:none;transition:transform .12s ease-out}
+@keyframes pkSway{0%,100%{--nx:-.55;--ny:.25}50%{--nx:.55;--ny:-.25}}
+@media (prefers-reduced-motion:reduce){.pk3d-in{animation:none}}
