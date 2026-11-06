@@ -158,7 +158,7 @@ h2{font-family:var(--display);font-weight:700;font-size:26px;line-height:1.05;ma
 
 /* ===== sheets / modals ===== */
 .sheet-bg{position:fixed;inset:0;background:rgba(2,18,13,.5);-webkit-backdrop-filter:blur(14px) saturate(140%);backdrop-filter:blur(14px) saturate(140%);z-index:40;display:flex;align-items:flex-end;justify-content:center;animation:fadein .2s ease-out both}
-.sheet-bg.open-bg{align-items:center;background:rgba(2,18,13,.62);-webkit-backdrop-filter:blur(26px) saturate(150%);backdrop-filter:blur(26px) saturate(150%)}
+.sheet-bg.open-bg{align-items:center;background:#041a14;-webkit-backdrop-filter:none;backdrop-filter:none}
 .sheet{width:100%;max-width:520px;max-height:82dvh;overflow:auto;background:rgba(8,44,33,.72);-webkit-backdrop-filter:var(--blur-hi);backdrop-filter:var(--blur-hi);border-radius:30px 30px 0 0;padding:10px 20px calc(var(--safe-b) + 22px);border:1px solid var(--line2);border-top-color:rgba(255,255,255,.5);border-bottom:0;box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 -20px 50px -16px rgba(0,0,0,.5);animation:sheetUp .4s var(--ease) both}
 .sheet::before{content:"";display:block;width:40px;height:5px;border-radius:5px;background:rgba(255,255,255,.4);margin:4px auto 16px}
 @keyframes sheetUp{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}
@@ -213,7 +213,7 @@ h2{font-family:var(--display);font-weight:700;font-size:26px;line-height:1.05;ma
 .legal{text-align:center;font-size:12.5px;color:var(--mut);margin:16px 0 0}
 
 /* ===== what's inside / collection ===== */
-.inside{position:fixed;inset:0;z-index:60;overflow-y:auto;background:var(--aurora),var(--bg);padding:calc(var(--safe-t) + 20px) 18px calc(var(--safe-b) + 120px);animation:fadein .2s ease-out both}
+.inside{position:fixed;inset:0;z-index:60;overflow-y:auto;background:#05221a;padding:calc(var(--safe-t) + 20px) 18px calc(var(--safe-b) + 120px);animation:fadein .2s ease-out both}
 .inside::before{content:"";position:fixed;inset:0;z-index:-1;background:var(--pitch-lines) center/cover no-repeat;pointer-events:none}
 .inside>*{max-width:520px;margin-inline:auto}
 .inside-head h1{font-size:46px;margin:6px 0 2px}
@@ -280,12 +280,12 @@ a.menu-row:active{background:var(--s2)}
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
   :root{--glass:rgba(23,91,69,.93)}
   .nav,.sheet{background:rgba(8,44,33,.96)}
-  .sheet-bg,.sheet-bg.open-bg{background:rgba(2,18,13,.9)}
+  .sheet-bg{background:rgba(2,18,13,.9)}
 }
 @media (prefers-reduced-transparency:reduce){
   :root{--glass:rgba(23,91,69,.96);--blur:none;--blur-hi:none}
   .nav,.sheet{background:rgba(8,44,33,.97)}
-  .sheet-bg,.sheet-bg.open-bg{background:rgba(2,18,13,.92);-webkit-backdrop-filter:none;backdrop-filter:none}
+  .sheet-bg{background:rgba(2,18,13,.92);-webkit-backdrop-filter:none;backdrop-filter:none}
 }
 
 /* ===== 3D pack tilt ===== */
