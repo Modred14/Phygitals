@@ -23,7 +23,7 @@ export default function AuthProvider({ children }) {
       if (!w?.initData) return !cancelled && setState({ status: "no-telegram", me: null }); // never fake auth
       try {
         w.ready(); w.expand();
-        w.setHeaderColor?.("#0b3d2e"); w.setBackgroundColor?.("#0b3d2e"); w.setBottomBarColor?.("#082f23");
+        w.setHeaderColor?.("#05221a"); w.setBackgroundColor?.("#05221a"); w.setBottomBarColor?.("#05221a");
         const { token } = await api("/api/auth/telegram", { method: "POST", body: JSON.stringify({ initData: w.initData, ref: new URLSearchParams(window.location.search).get("ref") ?? undefined }) });
         setToken(token);
         if (!cancelled) await refresh();

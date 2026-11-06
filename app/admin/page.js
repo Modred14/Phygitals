@@ -133,7 +133,7 @@ function Withdrawals() {
   const [st, setSt] = useState("PENDING"), [d, e, reload] = useLoad(`/api/admin/withdrawals?status=${st}`, [st]), [err, setErr] = useState(null);
   async function act(w, body, ask) { if (ask && !window.confirm(ask)) return; try { await adminApi(`/api/admin/withdrawals/${w.id}`, { method: "POST", body }); reload(); } catch (x) { setErr(x); } }
   return (<>
-    <div className="row gap" style={{ marginBottom: 12 }}>{["PENDING", "PROCESSING", "COMPLETED", "FAILED"].map((s) => <button key={s} className={`chip ${st === s ? "on" : ""}`} style={st === s ? { background: "#2b2b2b" } : {}} onClick={() => setSt(s)}>{s}</button>)}</div>
+    <div className="row gap" style={{ marginBottom: 12 }}>{["PENDING", "PROCESSING", "COMPLETED", "FAILED"].map((s) => <button key={s} className={`chip ${st === s ? "on" : ""}`} onClick={() => setSt(s)}>{s}</button>)}</div>
     <Err e={e || err} />
     <Table rows={d?.withdrawals} cols={[["User", (w) => w.user], ["Amount", (w) => fmt(w.amountCents)], ["Fee", (w) => fmt(w.platformFeeCents)], ["Send", (w) => <b>{fmt(w.amountCents - w.platformFeeCents)} USDC</b>], ["Destination", (w) => <span style={{ fontFamily: "monospace" }}>{w.destination}</span>], ["Requested", (w) => when(w.createdAt)], ["Tx", (w) => w.explorerUrl ? <a className="acc" href={w.explorerUrl} target="_blank" rel="noreferrer">view</a> : "—"],
       ["Actions", (w) => <span className="row gap">

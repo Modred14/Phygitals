@@ -8,7 +8,7 @@ import "@fontsource-variable/hanken-grotesk/index.css";
 import "./globals.css";
 
 export const metadata = { title: process.env.NEXT_PUBLIC_APP_NAME ?? "Football Packs", robots: { index: false } };
-export const viewport = { width: "device-width", initialScale: 1, viewportFit: "cover", themeColor: "#0b3d2e" };
+export const viewport = { width: "device-width", initialScale: 1, viewportFit: "cover", themeColor: "#05221a" };
 
 export default function RootLayout({ children }) {
   return (

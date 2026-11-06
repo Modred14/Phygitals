@@ -1,5 +1,6 @@
 // FILE: components/PlayerCard.js
-// Flat jersey-style collector cards. Solid colour blocks, pitch markings, condensed numerals. No gradients. Generic archetype names only.
+// Jersey-style collector cards. Solid rarity colour under a glass finish (curved gloss, lit rim), pitch markings, condensed numerals. Generic archetype names only.
+import { useId } from "react";
 import { cardIdentity, rarityOf } from "@/lib/cards";
 export { cardIdentity, rarityOf };
 
@@ -11,8 +12,21 @@ const PAL = {
   common: { face: "#f3f1e8", ink: "#0b3d2e", jersey: "#1f7a5a", trim: "#f3f1e8", num: "#f3f1e8", bar: "#165c43", barInk: "#f3f1e8", line: "#0b3d2e", label: "Common" },
 };
 
+const Finish = ({ uid, h = 290, r = 16 }) => (
+  <>
+    <defs>
+      <linearGradient id={`gl-${uid}`} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#fff" stopOpacity=".5"/><stop offset="1" stopColor="#fff" stopOpacity=".02"/></linearGradient>
+      <linearGradient id={`rm-${uid}`} x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#fff" stopOpacity=".95"/><stop offset=".5" stopColor="#fff" stopOpacity=".1"/><stop offset="1" stopColor="#fff" stopOpacity=".5"/></linearGradient>
+      <linearGradient id={`hl-${uid}`} x1="0" y1="1" x2="1" y2="0"><stop offset=".25" stopColor="#7dffd8" stopOpacity="0"/><stop offset=".5" stopColor="#fff" stopOpacity=".16"/><stop offset=".75" stopColor="#ff9bf0" stopOpacity="0"/></linearGradient>
+    </defs>
+    <rect width="200" height={h} rx={r} fill={`url(#hl-${uid})`}/>
+    <path d={`M0 ${r}a${r} ${r} 0 0 1 ${r}-${r}h${200 - 2 * r}a${r} ${r} 0 0 1 ${r} ${r}v82C140 84 60 86 0 112Z`} fill={`url(#gl-${uid})`} opacity=".42"/>
+    <rect x=".75" y=".75" width="198.5" height={h - 1.5} rx={r - .5} fill="none" stroke={`url(#rm-${uid})`} strokeWidth="1.5"/>
+  </>
+);
+
 export default function PlayerCard({ rarity = "common", name, number, pos }) {
-  const p = PAL[rarity] ?? PAL.common;
+  const p = PAL[rarity] ?? PAL.common, uid = useId().replace(/:/g, "");
   return (
     <svg viewBox="0 0 200 290" width="100%" role="img" aria-label={`${p.label} card: ${name}`} style={{ display: "block" }}>
       <rect width="200" height="290" rx="16" fill={p.face}/>
@@ -28,20 +42,24 @@ export default function PlayerCard({ rarity = "common", name, number, pos }) {
       <text x="100" y="214" textAnchor="middle" fontSize="56" fontWeight="800" fontStyle="italic" fill={p.num} fontFamily={DISPLAY}>{number}</text>
       <path d="M0 246H200V274a16 16 0 0 1-16 16H16A16 16 0 0 1 0 274Z" fill={p.bar}/>
       <text x="100" y="275" textAnchor="middle" fontSize="22" fontWeight="800" fontStyle="italic" fill={p.barInk} fontFamily={DISPLAY} letterSpacing=".5">{name.toUpperCase()}</text>
+      <Finish uid={uid} />
     </svg>
   );
 }
 
 export function CardBack() {
+  const uid = useId().replace(/:/g, "");
   const brand = (process.env.NEXT_PUBLIC_APP_NAME ?? "Football Packs").toUpperCase();
   return (
     <svg viewBox="0 0 200 290" width="100%" aria-hidden="true" style={{ display: "block" }}>
-      <rect width="200" height="290" rx="16" fill="#0f4a37"/>
+      <defs><linearGradient id={`bk-${uid}`} x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#23805f"/><stop offset="1" stopColor="#0a3a2b"/></linearGradient></defs>
+      <rect width="200" height="290" rx="16" fill={`url(#bk-${uid})`}/>
       <rect x="8" y="8" width="184" height="274" rx="11" fill="none" stroke="#f3f1e8" strokeOpacity=".4" strokeWidth="1.5"/>
       <circle cx="100" cy="145" r="52" fill="none" stroke="#f3f1e8" strokeOpacity=".5" strokeWidth="2"/>
       <rect x="8" y="144" width="184" height="2" fill="#f3f1e8" opacity=".5"/>
       <circle cx="100" cy="145" r="9" fill="#ffd23f"/>
       <text x="100" y="262" textAnchor="middle" fontSize="20" fontWeight="800" fontStyle="italic" fill="#f3f1e8" fontFamily={DISPLAY} letterSpacing="1">{brand}</text>
+      <Finish uid={uid} />
     </svg>
   );
 }

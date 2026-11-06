@@ -41,7 +41,7 @@ export default function OpenPackModal({ pack, onClose, onDone }) {
   const rarity = res ? rarityOf(res.opening.rewardCents, res.opening.priceCents) : "common";
   const id = res ? cardIdentity(pack.slug, res.opening.tierLabel, rarity) : null;
   return (
-    <div className="sheet-bg" style={{ alignItems: "center", background: "rgba(4,28,20,.96)" }} role="dialog" aria-modal="true" aria-label={`Opening ${pack.name}`}>
+    <div className="sheet-bg open-bg" role="dialog" aria-modal="true" aria-label={`Opening ${pack.name}`}>
       <div style={{ width: "100%", maxWidth: 420, padding: 22, textAlign: "center" }}>
         {stage === "shake" && (<>
           <div className="pk-stage"><div className="pk-swell"><div className="pk-jit"><PackArt slug={pack.slug} name={pack.name} width={230} /></div></div></div>

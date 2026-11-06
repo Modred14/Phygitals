@@ -18,7 +18,7 @@ export default function Landing({ error }) {
       <header className="land-top"><div className="brand">{name}</div><span className="chip">18+</span></header>
 
       <section className="land-hero">
-        <svg className="pitch" viewBox="0 0 520 360" fill="none" aria-hidden="true"><circle cx="260" cy="180" r="124" stroke="#25705a" strokeWidth="2"/><rect y="179" width="520" height="2" fill="#25705a"/><circle cx="260" cy="180" r="5" fill="#25705a"/></svg>
+        <svg className="pitch" viewBox="0 0 520 360" fill="none" aria-hidden="true"><circle cx="260" cy="180" r="124" stroke="rgba(255,255,255,.16)" strokeWidth="2"/><rect y="179" width="520" height="2" fill="rgba(255,255,255,.16)"/><circle cx="260" cy="180" r="5" fill="rgba(255,255,255,.16)"/></svg>
         <h1 className="land-h1">Open the pack. Pull the star.</h1>
         <p className="land-sub">Football player cards in four packs. Every pack lists its odds before you buy.</p>
         <div className="fan" aria-hidden="true">
