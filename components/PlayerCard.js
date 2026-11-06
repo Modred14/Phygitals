@@ -4,8 +4,8 @@ import { useId } from "react";
 import { cardIdentity, rarityOf } from "@/lib/cards";
 export { cardIdentity, rarityOf };
 
-const DISPLAY = "'Barlow Condensed','Arial Narrow',sans-serif";
-const SANS = "'Hanken Grotesk Variable',sans-serif";
+const DISPLAY = "var(--font-bricolage),sans-serif";
+const SANS = "var(--font-bricolage),sans-serif";
 const PAL = {
   epic: { face: "#14110a", ink: "#ffd23f", jersey: "#ffd23f", trim: "#14110a", num: "#14110a", bar: "#ffd23f", barInk: "#14110a", line: "#ffd23f", label: "Epic" },
   rare: { face: "#ffd23f", ink: "#1a1400", jersey: "#0b3d2e", trim: "#ffd23f", num: "#ffd23f", bar: "#1a1400", barInk: "#ffd23f", line: "#1a1400", label: "Rare" },
@@ -14,14 +14,7 @@ const PAL = {
 
 const Finish = ({ uid, h = 290, r = 16 }) => (
   <>
-    <defs>
-      <linearGradient id={`gl-${uid}`} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#fff" stopOpacity=".5"/><stop offset="1" stopColor="#fff" stopOpacity=".02"/></linearGradient>
-      <linearGradient id={`rm-${uid}`} x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#fff" stopOpacity=".95"/><stop offset=".5" stopColor="#fff" stopOpacity=".1"/><stop offset="1" stopColor="#fff" stopOpacity=".5"/></linearGradient>
-      <linearGradient id={`hl-${uid}`} x1="0" y1="1" x2="1" y2="0"><stop offset=".25" stopColor="#7dffd8" stopOpacity="0"/><stop offset=".5" stopColor="#fff" stopOpacity=".16"/><stop offset=".75" stopColor="#ff9bf0" stopOpacity="0"/></linearGradient>
-    </defs>
-    <rect width="200" height={h} rx={r} fill={`url(#hl-${uid})`}/>
-    <path d={`M0 ${r}a${r} ${r} 0 0 1 ${r}-${r}h${200 - 2 * r}a${r} ${r} 0 0 1 ${r} ${r}v82C140 84 60 86 0 112Z`} fill={`url(#gl-${uid})`} opacity=".42"/>
-    <rect x=".75" y=".75" width="198.5" height={h - 1.5} rx={r - .5} fill="none" stroke={`url(#rm-${uid})`} strokeWidth="1.5"/>
+    <rect x=".75" y=".75" width="198.5" height={h - 1.5} rx={r - .5} fill="none" stroke="#fff" strokeOpacity=".55" strokeWidth="1.5"/>
   </>
 );
 
@@ -52,8 +45,7 @@ export function CardBack() {
   const brand = (process.env.NEXT_PUBLIC_APP_NAME ?? "Football Packs").toUpperCase();
   return (
     <svg viewBox="0 0 200 290" width="100%" aria-hidden="true" style={{ display: "block" }}>
-      <defs><linearGradient id={`bk-${uid}`} x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#23805f"/><stop offset="1" stopColor="#0a3a2b"/></linearGradient></defs>
-      <rect width="200" height="290" rx="16" fill={`url(#bk-${uid})`}/>
+      <rect width="200" height="290" rx="16" fill="#14684c"/>
       <rect x="8" y="8" width="184" height="274" rx="11" fill="none" stroke="#f3f1e8" strokeOpacity=".4" strokeWidth="1.5"/>
       <circle cx="100" cy="145" r="52" fill="none" stroke="#f3f1e8" strokeOpacity=".5" strokeWidth="2"/>
       <rect x="8" y="144" width="184" height="2" fill="#f3f1e8" opacity=".5"/>

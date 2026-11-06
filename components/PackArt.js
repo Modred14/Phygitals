@@ -14,7 +14,7 @@ const PACKS = {
 };
 const FOIL = "#ebeae6";
 const INK = "#14151a";
-const SANS = "'Hanken Grotesk Variable','Hanken Grotesk',Inter,Arial,sans-serif";
+const SANS = "var(--font-bricolage),Arial,sans-serif";
 
 // zig-zag edge points from x=260 to x=0 (shared by both halves of a torn pack)
 const TEAR = Array.from({ length: 22 }, (_, i) => [260 - i * 12, i % 2 ? 86 : 76]).concat([[0, 76]]);
