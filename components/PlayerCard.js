@@ -7,8 +7,8 @@ export { cardIdentity, rarityOf };
 const DISPLAY = "var(--font-bricolage),sans-serif";
 const SANS = "var(--font-bricolage),sans-serif";
 const PAL = {
-  epic: { face: "#14110a", ink: "#ffd23f", jersey: "#ffd23f", trim: "#14110a", num: "#14110a", bar: "#ffd23f", barInk: "#14110a", line: "#ffd23f", label: "Epic" },
-  rare: { face: "#ffd23f", ink: "#1a1400", jersey: "#0b3d2e", trim: "#ffd23f", num: "#ffd23f", bar: "#1a1400", barInk: "#ffd23f", line: "#1a1400", label: "Rare" },
+  epic: { face: "#07120e", ink: "#8fdcb8", jersey: "#8fdcb8", trim: "#07120e", num: "#07120e", bar: "#8fdcb8", barInk: "#07120e", line: "#8fdcb8", label: "Epic" },
+  rare: { face: "#0f4a37", ink: "#e9fff4", jersey: "#05221a", trim: "#0f4a37", num: "#8fdcb8", bar: "#05221a", barInk: "#8fdcb8", line: "#8fdcb8", label: "Rare" },
   common: { face: "#f3f1e8", ink: "#0b3d2e", jersey: "#1f7a5a", trim: "#f3f1e8", num: "#f3f1e8", bar: "#165c43", barInk: "#f3f1e8", line: "#0b3d2e", label: "Common" },
 };
 
@@ -49,7 +49,7 @@ export function CardBack() {
       <rect x="8" y="8" width="184" height="274" rx="11" fill="none" stroke="#f3f1e8" strokeOpacity=".4" strokeWidth="1.5"/>
       <circle cx="100" cy="145" r="52" fill="none" stroke="#f3f1e8" strokeOpacity=".5" strokeWidth="2"/>
       <rect x="8" y="144" width="184" height="2" fill="#f3f1e8" opacity=".5"/>
-      <circle cx="100" cy="145" r="9" fill="#ffd23f"/>
+      <circle cx="100" cy="145" r="9" fill="#8fdcb8"/>
       <text x="100" y="262" textAnchor="middle" fontSize="20" fontWeight="800" fontStyle="italic" fill="#f3f1e8" fontFamily={DISPLAY} letterSpacing="1">{brand}</text>
       <Finish uid={uid} />
     </svg>
