@@ -3,23 +3,23 @@
 import { useEffect, useState } from "react";
 import PackArt from "./PackArt";
 import PlayerCard from "./PlayerCard";
+import Logo from "./Logo";
 import { fmtWhole } from "@/lib/format";
 
 const FALLBACK = [{ slug: "legend", name: "Legend Pack" }, { slug: "ballon-dor", name: "Ballon d'Or Winner" }, { slug: "prime", name: "Prime Pack" }, { slug: "superstar", name: "Superstar Pack" }];
 
 export default function Landing({ error }) {
   const bot = process.env.NEXT_PUBLIC_TELEGRAM_BOT_USERNAME;
-  const name = process.env.NEXT_PUBLIC_APP_NAME ?? "Football Packs";
+  const name = process.env.NEXT_PUBLIC_APP_NAME ?? "Phygitals";
   const [packs, setPacks] = useState(null);
   useEffect(() => { fetch("/api/packs").then((r) => r.json()).then((d) => setPacks(d.packs ?? [])).catch(() => setPacks([])); }, []);
   const list = packs?.length ? packs : FALLBACK;
   return (
     <div className="land">
-      <header className="land-top"><div className="brand">{name}</div><span className="chip">18+</span></header>
+      <header className="land-top"><Logo name={name} /><span className="chip">18+</span></header>
 
       <section className="land-hero">
-        <svg className="pitch" viewBox="0 0 520 360" fill="none" aria-hidden="true"><circle cx="260" cy="180" r="124" stroke="rgba(255,255,255,.16)" strokeWidth="2"/><rect y="179" width="520" height="2" fill="rgba(255,255,255,.16)"/><circle cx="260" cy="180" r="5" fill="rgba(255,255,255,.16)"/></svg>
-        <h1 className="land-h1">Open the pack. Pull the star.</h1>
+        <h1 className="land-h1">Open a pack. Pull a star.</h1>
         <p className="land-sub">Football player cards in four packs. Every pack lists its odds before you buy.</p>
         <div className="fan" aria-hidden="true">
           <div className="fan-card" style={{ "--end": "translate(-58px,16px) rotate(-11deg)", "--d": ".1s" }}><PlayerCard rarity="common" name="Rising Winger" number={7} pos="RW" /></div>

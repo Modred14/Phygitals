@@ -19,4 +19,7 @@ export const I = {
   wallet: <svg {...P}><path d="M4 7a2 2 0 0 1 2-2h12v4M4 7v10a2 2 0 0 0 2 2h14V9H6a2 2 0 0 1-2-2z"/><circle cx="16.5" cy="14" r="1"/></svg>,
   shield: <svg {...P}><path d="M12 3 5 6v6c0 4.5 3 7.5 7 9 4-1.5 7-4.5 7-9V6z"/><path d="m9 12 2 2 4-4"/></svg>,
   plus: <svg {...P}><path d="M12 5v14M5 12h14"/></svg>,
+  arrowIn: <svg {...P}><path d="M17 7 7 17M7 8v9h9"/></svg>,
+  arrowOut: <svg {...P}><path d="M7 17 17 7M8 7h9v9"/></svg>,
+  upload: <svg {...P}><path d="M12 15V4M7 9l5-5 5 5M5 20h14"/></svg>,
 };

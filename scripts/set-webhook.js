@@ -17,5 +17,5 @@ const base = (NEXT_PUBLIC_APP_URL ?? "").trim().replace(/\/+$/, "");
   await call("setChatMenuButton", { menu_button: { type: "web_app", text: "Open App", web_app: { url: base } } });
   const info = await call("getWebhookInfo");
   console.log("Webhook set:", info.url, "| pending updates:", info.pending_update_count, "| last error:", info.last_error_message ?? "none");
-  console.log(`Now open your bot in Telegram and send /start (app name shown: ${NEXT_PUBLIC_APP_NAME ?? "Football Packs"}).`);
+  console.log(`Now open your bot in Telegram and send /start (app name shown: ${NEXT_PUBLIC_APP_NAME ?? "Phygitals"}).`);
 })().catch((e) => { console.error("Failed:", e.message); process.exit(1); });

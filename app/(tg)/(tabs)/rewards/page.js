@@ -21,7 +21,7 @@ export default function RewardsPage() {
   return (
     <>
       <h1 style={{ textAlign: "center", fontSize: 30, margin: "16px 0" }}>Invite Friends</h1>
-      {!me.flags.referralRewards && <div className="banner" style={{ display: "flex", gap: 12 }}><span>Ⅱ</span><span>Referral credits are temporarily disabled. Check back soon!</span></div>}
+      {!me.flags.referralRewards && <div className="banner" style={{ display: "flex", gap: 12 }}><span style={{ display: "grid", flex: "none" }}>{I.shield}</span><span>Referral credits are temporarily disabled. Check back soon!</span></div>}
       {me.user.referredBy && (
         <div className="card pad row gap" style={{ marginTop: 14 }}><span className="avatar">@</span><div><b>@{me.user.referredBy} referred you</b><div className="mut" style={{ fontSize: 14 }}>You joined with their invite on {new Date(me.user.joinedAt).toLocaleDateString("en-US", { month: "short", day: "numeric" })}</div></div></div>
       )}

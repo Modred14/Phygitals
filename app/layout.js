@@ -1,19 +1,21 @@
 // FILE: app/layout.js
 import Script from "next/script";
-import { Bricolage_Grotesque } from "next/font/google";
+import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 
-const bricolage = Bricolage_Grotesque({
+const sans = Plus_Jakarta_Sans({
   subsets: ["latin"],
-  variable: "--font-bricolage",
+  variable: "--font-sans",
+  weight: ["400", "500", "600", "700", "800"],
+  display: "swap",
 });
 
-export const metadata = { title: process.env.NEXT_PUBLIC_APP_NAME ?? "Football Packs", robots: { index: false } };
+export const metadata = { title: process.env.NEXT_PUBLIC_APP_NAME ?? "Phygitals", robots: { index: false } };
 export const viewport = { width: "device-width", initialScale: 1, viewportFit: "cover", themeColor: "#05221a" };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={bricolage.variable}>
+    <html lang="en" className={sans.variable}>
       <body>
         <Script src="https://telegram.org/js/telegram-web-app.js" strategy="beforeInteractive" />
         {children}

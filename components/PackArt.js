@@ -14,7 +14,7 @@ const PACKS = {
 };
 const FOIL = "#ebeae6";
 const INK = "#14151a";
-const SANS = "var(--font-bricolage),Arial,sans-serif";
+const SANS = "var(--font-sans),Arial,sans-serif";
 
 // zig-zag edge points from x=260 to x=0 (shared by both halves of a torn pack)
 const TEAR = Array.from({ length: 22 }, (_, i) => [260 - i * 12, i % 2 ? 86 : 76]).concat([[0, 76]]);
@@ -69,7 +69,7 @@ export default function PackArt({ slug, name, width = 260, torn = false }) {
       <rect x="40" y="52" width="180" height="20" rx="10" fill="#fff" fillOpacity=".5" stroke="#fff" strokeOpacity=".85" strokeWidth="1"/>
       <text x="130" y="65.5" textAnchor="middle" fontSize="8.6" fontWeight="700" letterSpacing="1.5" fill={INK} fillOpacity=".8" fontFamily={SANS}>FOOTBALL TRADING CARDS</text>
       <text x="26" y="124" fontSize="50" fontWeight="500" fill={INK} fontFamily={SANS} textLength="208" lengthAdjust="spacingAndGlyphs">FOOTBALL</text>
-      <text x="26" y={124 + fs * 0.92} fontSize={fs} fontWeight="800" fontStyle="italic" fill={c.accent} fontFamily={SANS}>{c.words}</text>
+      <text x="26" y={124 + fs * 0.92} fontSize={fs} fontWeight="800" fill={c.accent} fontFamily={SANS}>{c.words}</text>
 
       </g>
 

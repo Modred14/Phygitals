@@ -18,7 +18,7 @@ export async function POST(req) {
     const url = appUrl(req);
     if (!url.startsWith("https://")) console.error("welcome_skipped: no usable https app URL (set NEXT_PUBLIC_APP_URL)");
     else {
-      try { await tgCall("sendMessage", welcomeMessage(msg.chat.id, { payload: cmd.payload, appName: process.env.NEXT_PUBLIC_APP_NAME ?? "Football Packs", url })); }
+      try { await tgCall("sendMessage", welcomeMessage(msg.chat.id, { payload: cmd.payload, appName: process.env.NEXT_PUBLIC_APP_NAME ?? "Phygitals", url })); }
       catch (e) { console.error("welcome_failed", e.message); }
     }
   }
